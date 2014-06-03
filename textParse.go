@@ -6,6 +6,8 @@ import (
     "log"
     "bufio"
     "strings"
+    "syscall"
+    "os/exec"
 )
 
 /*****
@@ -88,9 +90,23 @@ func main() {
   commonWords["in"] = true
   commonWords["by"] = true
 
+  // Testing wordNet.
+  binary, lookErr := exec.LookPath("wn")
+  if lookErr != nil {
+    panic(lookErr)
+  }
+
   for key, value := range words {
-    if !commonWords[key] && value.count > 1 {
+    if !commonWords[key] && value.count > 8 {
       fmt.Println(value.count, key)
+
+      // Creating the arguments.
+      args := []string{"wn", key, "-synsn"}
+
+      execErr := syscall.Exec(binary, args, env)
+      if execErr != nil {
+          panic(execErr)
+      }
     }
   }
 }

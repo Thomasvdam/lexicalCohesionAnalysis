@@ -22,4 +22,7 @@ The parsing of the texts is of course the most difficult step and involves sever
 
 * Currently I strip all special characters from the tokens, which will be problematic with possessives and and/or constructions.  
 * I filter out common words ('a', 'the', etc) at the end. I'll want to change this when I add distance tracking.  
-* I have WordNet 3.0 working on my system. I feel that this tool can end up being really useful so I am going to dedicate some time to writing a wrapper for it in go.
+* I have WordNet 3.0 working on my system. I feel that this tool can end up being really useful so I am going to dedicate some time to writing a wrapper for it in go.  
+  * WordNet distinguishes between nouns, verbs, adjectives, and adverbs.  
+  * Within these categories it will distinguish between the different 'senses' a word can have.  
+  * Finally, with the above two pieces of information WN can produce all sorts of information such as a list of synonyms, derivates, etc.
