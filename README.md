@@ -22,7 +22,15 @@ The parsing of the texts is of course the most difficult step and involves sever
 
 * Currently I strip all special characters from the tokens, which will be problematic with possessives and and/or constructions.  
 * I filter out common words ('a', 'the', etc) at the end. I'll want to change this when I add distance tracking.  
-* I have WordNet 3.0 working on my system. I feel that this tool can end up being really useful so I am going to dedicate some time to writing a wrapper for it in go.  
+* I have WordNet 3.0 working on my system. I feel that this tool can end up being really useful so I am going to dedicate some time to writing a 'wrapper' for it in go.  
   * WordNet distinguishes between nouns, verbs, adjectives, and adverbs.  
   * Within these categories it will distinguish between the different 'senses' a word can have.  
   * Finally, with the above two pieces of information WN can produce all sorts of information such as a list of synonyms, derivates, etc.
+
+### WordNet
+
+* How to determine the word type of a word?
+* How to determine the correct sense of a word?  
+  * Perhaps possible to see which sense has the highest degree of synonym overlap? This will probably take a lot of time, especially in larger texts...
+
+The wrapper is now somewhat functional in the sense that I now get the results in a remotely useful format. There are still some problems though, namely where names are concerned, but my hope is that this will not prove to be detrimental. The processing is horrific atm but I don't really see a better way unless there's a programmatic API for WordNet that I can use.

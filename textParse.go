@@ -1,14 +1,23 @@
 package main
 
 import (
-    "os"
-    "fmt"
-    "log"
-    "bufio"
-    "strings"
-    "syscall"
-    "os/exec"
+  "os"
+  "fmt"
+  "log"
+  "bufio"
+  "strings"
+  "github.com/Arcania0311/textParse/wordNet"
 )
+
+/*****
+ * Save the word types as constants.
+ */
+const (
+  NOUN = iota
+  VERB
+  ADJ
+  ADV
+  )
 
 /*****
  * Struct which stores details about a specific token.
@@ -90,23 +99,12 @@ func main() {
   commonWords["in"] = true
   commonWords["by"] = true
 
-  // Testing wordNet.
-  binary, lookErr := exec.LookPath("wn")
-  if lookErr != nil {
-    panic(lookErr)
-  }
 
   for key, value := range words {
     if !commonWords[key] && value.count > 8 {
       fmt.Println(value.count, key)
 
-      // Creating the arguments.
-      args := []string{"wn", key, "-synsn"}
-
-      execErr := syscall.Exec(binary, args, env)
-      if execErr != nil {
-          panic(execErr)
-      }
+      fmt.Println(wordNet.LookUp(key, NOUN))
     }
   }
 }
