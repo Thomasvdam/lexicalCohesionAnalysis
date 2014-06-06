@@ -1,36 +1,38 @@
-# Visualising Structure
+# Visualising Lexical Cohesion over Token Time
 
-An attempt at developing an application that is able to parse texts, identify cohesive ties within it, and then present the data collected in an undirected graph.
+An attempt at developing an application that is able to parse texts, identify cohesive ties within it, and then present the data collected in a visual manner.
 
 ## Why
 
-For my bachelor thesis I want to develop this piece of software to help me better investigate the differences in structure between learner texts and expert texts. I hypothesise that, when presented as un undirected force graph, expert texts will generally have a higher clustering coefficient, meaning they will look more dense and interconnected.
+For my bachelor thesis I want to develop this piece of software to help me better investigate the differences in structure between learner texts and expert texts. I hypothesise that learner texts will show a smaller degree of semantic cohesion when compared to expert texts. In order to test this I make use of WordNet to gather information about the words in the text which I then transform into a score of sorts which tells something about the amount of semantic overlap between lexical tokens.
 
 ## Rough Overview
 
 There are two main components to this application: the parsing of a text, and the displaying of the results.
 
 #### Display
-Since I intend to display the results in a graph it is probably best if I use the javascript D3 library for this, since this contains excellent methods in order to display and manipulate graphs of varying sorts and sizes. This does mean that I should present the results from the parsing process in a particular manner.
+Since I intend to display the results in a visual manner it is probably best if I use the javascript D3 library for this, since this contains excellent methods in order to display and manipulate graphs of varying sorts and sizes. This does mean that I should present the results from the parsing process in a JSON.
 
 #### Parsing
 The parsing of the texts is of course the most difficult step and involves several stages:  
-* Identifying relevant words and keeping track of their count, and the relation between it and other relevant words.  
-* Identifying overlap in relevant words: two different words can refer to the same entity. An easy example are synonyms, but there are also pronouns to take into account.
+* Identifying lexical tokens and the relation between them within a particular frame of observation.  
 
 ## Notes
 
-* Currently I strip all special characters from the tokens, which will be problematic with possessives and and/or constructions.  
-* I filter out common words ('a', 'the', etc) at the end. I'll want to change this when I add distance tracking.  
-* I have WordNet 3.0 working on my system. I feel that this tool can end up being really useful so I am going to dedicate some time to writing a 'wrapper' for it in go.  
-  * WordNet distinguishes between nouns, verbs, adjectives, and adverbs.  
-  * Within these categories it will distinguish between the different 'senses' a word can have.  
-  * Finally, with the above two pieces of information WN can produce all sorts of information such as a list of synonyms, derivates, etc.
+The entirety of the WordNet interface is terrible since I spawn shell process for every query. If I ever want to improve this program I'll have to write a wrapper for the native C code, which should speed up the process significantly.
 
-### WordNet
+* Currently I strip all special characters from the tokens, which will be problematic with possessives and and/or constructions.
+* Right now the program decides on the word type (noun, verb, adjective, adverb) by checking which use is most frequent.
 
-* How to determine the word type of a word?
-* How to determine the correct sense of a word?  
-  * Perhaps possible to see which sense has the highest degree of synonym overlap? This will probably take a lot of time, especially in larger texts...
+## To Do
 
-The wrapper is now somewhat functional in the sense that I now get the results in a remotely useful format. There are still some problems though, namely where names are concerned, but my hope is that this will not prove to be detrimental. The processing is horrific atm but I don't really see a better way unless there's a programmatic API for WordNet that I can use.
+1. [ ] Create a functional core program that can parse a text and produces some kind of result.  
+  - [ ] Make an accessible interface to WordNet, albeit not very efficient.  
+    - [x] Determine the type of word.  
+    - [ ] Check for synonym overlap.  
+    - [ ] Check for antonym overlap.  
+    - [ ] Check for hyponym overlap.
+  - [ ] Write the main loop and source text cleaning.
+  - [ ] Determine how to score the different types of relations lexical tokens can have.  
+2. [ ] Package the results in a nice JSON.
+3. [ ] Write a small JS script that displays the results.

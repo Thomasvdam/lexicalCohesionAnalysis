@@ -17,7 +17,7 @@ const (
   VERB
   ADJ
   ADV
-  )
+)
 
 /*****
  * Struct which stores details about a specific token.
@@ -104,7 +104,7 @@ func main() {
     if !commonWords[key] && value.count > 8 {
       fmt.Println(value.count, key)
 
-      fmt.Println(wordNet.LookUp(key, NOUN))
+      fmt.Println(wordNet.Compare(key, key, NOUN, NOUN))
     }
   }
 }

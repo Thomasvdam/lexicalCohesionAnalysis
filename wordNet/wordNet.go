@@ -1,10 +1,20 @@
 package wordNet
 
 import (
-  "fmt"
+  //"fmt"
   "strings"
   "os/exec"
   "io/ioutil"
+)
+
+/*****
+ * Save the word types as constants.
+ */
+const (
+  NOUN, SYNS = iota, iota
+  VERB, ANTS
+  ADJ, HYPE
+  ADV, FAML
 )
 
 type sense struct {
@@ -24,29 +34,18 @@ func newResult(word string) (result *wordNetResult) {
 }
 
 /*****
+ * Compare one word to another and return a score based on the semantic overlap.
+ */
+func Compare(wordA, wordB string, typeA, typeB int) int {
+  return 1
+}
+
+/*****
  * Look up the possible senses of a word and the related synonyms.
  */
-func LookUp(word string, wordType int) *wordNetResult {
+func lookUpSyns(word string, wordType int) *wordNetResult {
 
-  // Find the correct argument.
-  argument := ""
-  switch wordType {
-    case 0:
-      argument = "-synsn"
-    case 1:
-      argument = "-synsv"
-    case 2:
-      argument = "-synsa"
-    case 3:
-      argument = "-synsr"
-  }
-
-  // Spawn a WN process with the correct arguments and collect results.
-  wnCmnd := exec.Command("wn", word, argument)
-  wnOut, _ := wnCmnd.StdoutPipe()
-  wnCmnd.Start()
-  wnBytes, _ := ioutil.ReadAll(wnOut)
-  wnCmnd.Wait()
+  wnBytes := rawWordNetQuery(word, wordType, SYNS)
 
   // Process the data into a more friendly format.
   result := newResult(word)
@@ -116,4 +115,44 @@ func LookUp(word string, wordType int) *wordNetResult {
   }
 
   return result
+}
+
+/*****
+ * Abstraction for WordNet queries. Returns the unprocessed bytes produced
+ * by the query.
+ */
+func rawWordNetQuery(word string, wordType, queryType int) []byte {
+
+  argument := ""
+  switch queryType {
+    case SYNS:
+      argument = "-syns"
+    case ANTS:
+      argument = "-ants"
+    case HYPE:
+      argument = "-hype"
+    case FAML:
+      argument = "-faml"
+  }
+
+  switch wordType {
+    case NOUN:
+      argument += "n"
+    case VERB:
+      argument += "v"
+    case ADJ:
+      argument += "a"
+    case ADV:
+      argument += "r"
+  }
+
+
+  // Spawn a WN process with the correct arguments and collect results.
+  wnCmnd := exec.Command("wn", word, argument)
+  wnOut, _ := wnCmnd.StdoutPipe()
+  wnCmnd.Start()
+  wnBytes, _ := ioutil.ReadAll(wnOut)
+  wnCmnd.Wait()
+
+  return wnBytes
 }
