@@ -22,16 +22,16 @@ The parsing of the texts is of course the most difficult step and involves sever
 The entirety of the WordNet interface is terrible since I spawn shell process for every query. If I ever want to improve this program I'll have to write a wrapper for the native C code, which should speed up the process significantly.
 
 * Currently I strip all special characters from the tokens, which will be problematic with possessives and and/or constructions.
-* Right now the program decides on the word type (noun, verb, adjective, adverb) by checking which use is most frequent.
 
 ## To Do
 
 1. [ ] Create a functional core program that can parse a text and produces some kind of result.  
   - [ ] Make an accessible interface to WordNet, albeit not very efficient.  
-    - [x] Determine the type of word.  
-    - [ ] Check for synonym overlap.  
-    - [ ] Check for antonym overlap.  
-    - [ ] Check for hyponym overlap.
+    - [ ] Create a function that tokenises words.  
+      - [x] Finds the number of senses per word type.  
+      - [ ] Places all the senses in an ontology tree which is constructed simultaneously.
+    - [ ] Create a function that compares two senses based on their ontological paths.
+    - [ ] From there decide which sense is most likely. ???
   - [ ] Write the main loop and source text cleaning.
   - [ ] Determine how to score the different types of relations lexical tokens can have.  
 2. [ ] Package the results in a nice JSON.

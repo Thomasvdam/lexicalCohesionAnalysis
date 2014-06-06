@@ -104,7 +104,7 @@ func main() {
     if !commonWords[key] && value.count > 8 {
       fmt.Println(value.count, key)
 
-      fmt.Println(wordNet.Compare(key, key, NOUN, NOUN))
+      fmt.Println(wordNet.CreateToken(key))
     }
   }
 }

@@ -1,151 +1,53 @@
 package wordNet
 
 import (
-  //"fmt"
-  "strings"
   "os/exec"
   "io/ioutil"
 )
 
 /*****
- * Save the word types as constants.
+ * Save the word types and query types as constants.
  */
 const (
-  NOUN, SYNS = iota, iota
-  VERB, ANTS
-  ADJ, HYPE
-  ADV, FAML
+  NOUN = iota
+  VERB
+  ADJ
+  ADV
 )
 
-type sense struct {
-  Synonyms []string
-  Meaning string
-}
-
-type wordNetResult struct {
-  Word string
-  Senses []*sense
-
-}
-
-func newResult(word string) (result *wordNetResult) {
-  result = &wordNetResult{word, make([]*sense, 20)}
-  return
-}
+var ROOT = &treeNode{"entity", nil, make([]*treeNode, 0)}
 
 /*****
  * Compare one word to another and return a score based on the semantic overlap.
  */
-func Compare(wordA, wordB string, typeA, typeB int) int {
-  return 1
+func CreateToken(word string) (newToken *token) {
+
+  newToken = tokenize(word)
+  if (newToken == nil) {
+    return
+  }
+
+  for sense := 0; sense < len(newToken.sensesN); sense++ {
+    newToken.sensesN[sense] = hypeQuery(word, sense, NOUN)
+  }
+  for sense := 0; sense < len(newToken.sensesV); sense++ {
+    newToken.sensesV[sense] = hypeQuery(word, sense, VERB)
+  }
+  for sense := 0; sense < len(newToken.sensesA); sense++ {
+    newToken.sensesA[sense] = hypeQuery(word, sense, ADJ)
+  }
+  for sense := 0; sense < len(newToken.sensesR); sense++ {
+    newToken.sensesR[sense] = hypeQuery(word, sense, ADV)
+  }
+
+  return
 }
 
-/*****
- * Look up the possible senses of a word and the related synonyms.
- */
-func lookUpSyns(word string, wordType int) *wordNetResult {
-
-  wnBytes := rawWordNetQuery(word, wordType, SYNS)
-
-  // Process the data into a more friendly format.
-  result := newResult(word)
-
-  wnCmndString := string(wnBytes)
-  stripString := func(r rune) rune {
-    switch {
-    case r == '=' || r == '>':
-      return r
-    case (r < 'a' || r > 'z') && (r < 'A' || r > 'Z'):
-        return ' '
-    }
-    return r
-  }
-  tmp := strings.Map(stripString, wnCmndString)
-
-  split := strings.Split(tmp, " ")
-
-  senseID := 0
-
-  for x:= 0; x < len(split); x++ {
-
-    // Skip until a sense is reached.
-    if split[x] != "Sense" {
-      continue
-    }
-
-    x++
-
-    sense := &sense{make([]string, 10), ""}
-    synonymID := 0
-
-    // While synonyms remain.
-    for split[x] != "=>" && split[x] != "INSTANCE"{
-      if (split[x] == "") {
-        x++
-        continue
-      }
-      sense.Synonyms[synonymID] = split[x]
-      synonymID++
-      x++
-    }
-
-    x++
-
-    for x < len(split) && split[x] != "Sense" {
-
-      switch split[x] {
-      case "INSTANCE":
-        x++
-        continue
-      case "OF=>":
-        sense.Meaning = sense.Meaning + "\nInstance Of: "
-        x++
-        continue
-      case "":
-        x++
-        continue
-      }
-
-      sense.Meaning = sense.Meaning + split[x] + " "
-      x++
-    }
-    result.Senses[senseID] = sense
-    senseID++
-    x--
-  }
-
-  return result
-}
 
 /*****
- * Abstraction for WordNet queries. Returns the unprocessed bytes produced
- * by the query.
+ * Most basic abstraction of a WordNet query.
  */
-func rawWordNetQuery(word string, wordType, queryType int) []byte {
-
-  argument := ""
-  switch queryType {
-    case SYNS:
-      argument = "-syns"
-    case ANTS:
-      argument = "-ants"
-    case HYPE:
-      argument = "-hype"
-    case FAML:
-      argument = "-faml"
-  }
-
-  switch wordType {
-    case NOUN:
-      argument += "n"
-    case VERB:
-      argument += "v"
-    case ADJ:
-      argument += "a"
-    case ADV:
-      argument += "r"
-  }
-
+func wordNetQuery(word, argument string) []byte {
 
   // Spawn a WN process with the correct arguments and collect results.
   wnCmnd := exec.Command("wn", word, argument)
