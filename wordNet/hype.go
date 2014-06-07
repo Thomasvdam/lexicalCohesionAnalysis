@@ -27,8 +27,14 @@ func newTreeNode(word string, path []int) (node *treeNode) {
 /*****
  * Look up a specific sense of a word in WordNet and place it in the ontology tree.
  */
-func hypeQuery(word string, senseNo, wordType int) *treeNode {
+func hypeQuery(word string, senseNo int) *treeNode {
 
+  // rawBytes := rawHypeQuery(word, senseNo)
+  // tmp := string(rawBytes)
+  // splitLine := strings.Split(tmp, "\n")
+  // for index, value := range splitLine {
+  //   fmt.Println(index, value)
+  // }
   return nil
 }
 
@@ -36,20 +42,9 @@ func hypeQuery(word string, senseNo, wordType int) *treeNode {
  * Abstraction for WordNet queries. Returns the unprocessed bytes produced
  * by the query.
  */
-func rawHypeQuery(word string, wordType, senseNo int) []byte {
+func rawHypeQuery(word string, senseNo int) []byte {
 
-  argument := "-hype"
-
-  switch wordType {
-    case NOUN:
-      argument += "n"
-    case VERB:
-      argument += "v"
-    case ADJ:
-      argument += "a"
-    case ADV:
-      argument += "r"
-  }
+  argument := "-hypen"
 
   return wordNetQuery(word, argument, senseNo)
 }

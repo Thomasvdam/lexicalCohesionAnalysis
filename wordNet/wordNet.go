@@ -1,18 +1,9 @@
 package wordNet
 
 import (
+  "strconv"
   "os/exec"
   "io/ioutil"
-)
-
-/*****
- * Save the word types and query types as constants.
- */
-const (
-  NOUN = iota
-  VERB
-  ADJ
-  ADV
 )
 
 var ROOT = &treeNode{"entity", nil, make([]*treeNode, 0)}
@@ -20,7 +11,7 @@ var ROOT = &treeNode{"entity", nil, make([]*treeNode, 0)}
 /*****
  * Compare one word to another and return a score based on the semantic overlap.
  */
-func CreateToken(word string) (newToken *token) {
+func CreateToken(word string) (newToken *Token) {
 
   newToken = tokenize(word)
   if (newToken == nil) {
@@ -28,16 +19,7 @@ func CreateToken(word string) (newToken *token) {
   }
 
   for sense := 0; sense < len(newToken.sensesN); sense++ {
-    newToken.sensesN[sense] = hypeQuery(word, sense, NOUN)
-  }
-  for sense := 0; sense < len(newToken.sensesV); sense++ {
-    newToken.sensesV[sense] = hypeQuery(word, sense, VERB)
-  }
-  for sense := 0; sense < len(newToken.sensesA); sense++ {
-    newToken.sensesA[sense] = hypeQuery(word, sense, ADJ)
-  }
-  for sense := 0; sense < len(newToken.sensesR); sense++ {
-    newToken.sensesR[sense] = hypeQuery(word, sense, ADV)
+    newToken.sensesN[sense] = hypeQuery(word, sense + 1)
   }
 
   return
@@ -52,7 +34,7 @@ func wordNetQuery(word, argument string, senseNo int) []byte {
   // Spawn a WN process with the correct arguments and collect results.
   sense := ""
   if (senseNo != 0) {
-    sense = "-" + string(senseNo)
+    sense = "-n" + strconv.Itoa(senseNo)
   }
 
   wnCmnd := exec.Command("wn", word, sense, argument)

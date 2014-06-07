@@ -22,13 +22,14 @@ The parsing of the texts is of course the most difficult step and involves sever
 The entirety of the WordNet interface is terrible since I spawn shell process for every query. If I ever want to improve this program I'll have to write a wrapper for the native C code, which should speed up the process significantly.
 
 * Currently I strip all special characters from the tokens, which will be problematic with possessives and and/or constructions.
+* I decided to drop all wordTypes other than nouns, since nouns are the easiest to classify and determine 'similarity' between. This change goes hand in hand with the decision to use the ontological tree to help determine how related 2 word senses are. It boils down to how far removed from each other the two senses are in the tree.  
+  * This decision is partly due to the fact that it significantly increases performance.
 
 ## To Do
 
 1. [ ] Create a functional core program that can parse a text and produces some kind of result.  
   - [ ] Make an accessible interface to WordNet, albeit not very efficient.  
-    - [ ] Create a function that tokenises words.  
-      - [x] Finds the number of senses per word type.  
+    - [ ] Create a function that tokenises words.
       - [ ] Places all the senses in an ontology tree which is constructed simultaneously.
     - [ ] Create a function that compares two senses based on their ontological paths.
     - [ ] From there decide which sense is most likely. ???

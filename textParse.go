@@ -20,14 +20,6 @@ const (
 )
 
 /*****
- * Struct which stores details about a specific token.
- */
-type wordToken struct {
-  id int
-  count int
-}
-
-/*****
  * Open the specified file and return a slice of its lines.
  */
 func importLines(path string) ([]string, error) {
@@ -53,37 +45,7 @@ func main() {
   }
 
   // Create a map in which the words are stored.
-  id := 0
-  words := make(map[string]*wordToken)
-
-  // Process all the lines.
-  for _, line := range lines {
-    line = strings.ToLower(line)
-    splitLine := strings.Split(line, " ")
-
-    // Place all the words in the map with a corresponding id.
-    for _, tmp := range splitLine {
-
-      // Remove special characters from the string.
-      stripWord := func(r rune) rune {
-        switch {
-          case r < 'a' || r > 'z':
-            return -1
-        }
-        return r
-      }
-      tmp = strings.Map(stripWord, tmp)
-
-      token, ok := words[tmp]
-      if ok {
-        token.count++
-      } else {
-        words[tmp] = &wordToken{id, 1}
-        id++
-      }
-    }
-
-  }
+  words := make(map[string]*wordNet.Token)
 
   // Ugly way to get rid of the most common words.
   commonWords := make(map[string]bool)
@@ -99,12 +61,42 @@ func main() {
   commonWords["in"] = true
   commonWords["by"] = true
 
+  // Process all the lines.
+  for _, line := range lines {
+    line = strings.ToLower(line)
+    splitLine := strings.Split(line, " ")
 
-  for key, value := range words {
-    if !commonWords[key] && value.count > 8 {
-      fmt.Println(value.count, key)
+    // Tokenize the words.
+    for _, tmp := range splitLine {
 
-      fmt.Println(wordNet.CreateToken(key))
+      // Remove special characters from the string.
+      stripWord := func(r rune) rune {
+        switch {
+          case r < 'a' || r > 'z':
+            return -1
+        }
+        return r
+      }
+      tmp = strings.Map(stripWord, tmp)
+
+      _, check := commonWords[tmp]
+      if check {
+        continue
+      }
+
+      _, ok := words[tmp]
+      if ok {
+        continue
+      } else {
+        words[tmp] = wordNet.CreateToken(tmp)
+      }
     }
+
+  }
+
+  // Print the results.
+  for key, value := range words {
+    fmt.Println(key, value)
+
   }
 }
