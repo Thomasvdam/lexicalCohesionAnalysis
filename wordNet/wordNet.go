@@ -47,14 +47,18 @@ func CreateToken(word string) (newToken *token) {
 /*****
  * Most basic abstraction of a WordNet query.
  */
-func wordNetQuery(word, argument string) []byte {
+func wordNetQuery(word, argument string, senseNo int) []byte {
 
   // Spawn a WN process with the correct arguments and collect results.
-  wnCmnd := exec.Command("wn", word, argument)
+  sense := ""
+  if (senseNo != 0) {
+    sense = "-" + string(senseNo)
+  }
+
+  wnCmnd := exec.Command("wn", word, sense, argument)
   wnOut, _ := wnCmnd.StdoutPipe()
   wnCmnd.Start()
   wnBytes, _ := ioutil.ReadAll(wnOut)
   wnCmnd.Wait()
-
   return wnBytes
 }

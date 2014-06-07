@@ -53,5 +53,5 @@ func rawFamlQuery(word string, wordType int) []byte {
       argument += "r"
   }
 
-  return wordNetQuery(word, argument)
+  return wordNetQuery(word, argument, 0)
 }

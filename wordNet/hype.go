@@ -36,7 +36,7 @@ func hypeQuery(word string, senseNo, wordType int) *treeNode {
  * Abstraction for WordNet queries. Returns the unprocessed bytes produced
  * by the query.
  */
-func rawHypeQuery(word string, wordType int) []byte {
+func rawHypeQuery(word string, wordType, senseNo int) []byte {
 
   argument := "-hype"
 
@@ -51,5 +51,5 @@ func rawHypeQuery(word string, wordType int) []byte {
       argument += "r"
   }
 
-  return wordNetQuery(word, argument)
+  return wordNetQuery(word, argument, senseNo)
 }
