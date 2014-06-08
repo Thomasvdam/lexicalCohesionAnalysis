@@ -24,13 +24,15 @@ The entirety of the WordNet interface is terrible since I spawn shell process fo
 * Currently I strip all special characters from the tokens, which will be problematic with possessives and and/or constructions.
 * I decided to drop all wordTypes other than nouns, since nouns are the easiest to classify and determine 'similarity' between. This change goes hand in hand with the decision to use the ontological tree to help determine how related 2 word senses are. It boils down to how far removed from each other the two senses are in the tree.  
   * This decision is partly due to the fact that it significantly increases performance.
+* It might be worthwhile to drop words that have a low polysemy count as nouns altogether. At the moment I have the threshold set to 3, but this can be easily changed.
+* The ontological tree is now constructed based on the first path that WordNet displays, mainly because this saves a lot of time and from what I have seen it should not make too big of a difference.
 
 ## To Do
 
 1. [ ] Create a functional core program that can parse a text and produces some kind of result.  
   - [ ] Make an accessible interface to WordNet, albeit not very efficient.  
-    - [ ] Create a function that tokenises words.
-      - [ ] Places all the senses in an ontology tree which is constructed simultaneously.
+    - [x] Create a function that tokenises words.
+      - [x] Places all the senses in an ontology tree which is constructed simultaneously.
     - [ ] Create a function that compares two senses based on their ontological paths.
     - [ ] From there decide which sense is most likely. ???
   - [ ] Write the main loop and source text cleaning.

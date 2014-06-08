@@ -1,8 +1,7 @@
 package wordNet
 
 import (
-  // "fmt"
-  // "strings"
+  "strings"
 )
 
 /*****
@@ -10,17 +9,14 @@ import (
  */
 type treeNode struct {
   name string
-  path []int
   children []*treeNode
 }
 
 /*****
  * Create a new node with the passed name.
  */
-func newTreeNode(word string, path []int) (node *treeNode) {
-  newPath := make([]int, len(path))
-  copy(newPath, path)
-  node = &treeNode{word, newPath, make([]*treeNode, 0)}
+func newTreeNode(word string) (node *treeNode) {
+  node = &treeNode{word, make([]*treeNode, 0)}
   return
 }
 
@@ -29,13 +25,45 @@ func newTreeNode(word string, path []int) (node *treeNode) {
  */
 func hypeQuery(word string, senseNo int) *treeNode {
 
-  // rawBytes := rawHypeQuery(word, senseNo)
-  // tmp := string(rawBytes)
-  // splitLine := strings.Split(tmp, "\n")
-  // for index, value := range splitLine {
-  //   fmt.Println(index, value)
-  // }
-  return nil
+  rawBytes := rawHypeQuery(word, senseNo)
+  tmp := string(rawBytes)
+  splitLine := strings.Split(tmp, "\n")
+
+  // Find the first path.
+  lineNo := 0
+  for x := 4; x < len(splitLine); x++ {
+    splitLine[x] = strings.TrimSpace(splitLine[x])
+    splitLine[x] = strings.TrimPrefix(splitLine[x], "=> ")
+    if (splitLine[x] == ROOT.name) {
+      lineNo = x
+      break
+    }
+  }
+
+  // Work back from the end of the first path.
+  prevNode := ROOT
+  foundChild := false
+  for x := lineNo - 1; x > 3; x-- {
+
+    // Check wether the word is already a child.
+    for _, value := range prevNode.children {
+      if (value.name == splitLine[x]) {
+        prevNode = value
+        foundChild = true
+      }
+    }
+
+    if (foundChild) {
+      foundChild = false
+      continue
+    } else {
+      newNode := newTreeNode(splitLine[x])
+      prevNode.children = append(prevNode.children, newNode)
+      prevNode = newNode
+    }
+  }
+
+  return prevNode
 }
 
 /*****

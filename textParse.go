@@ -2,7 +2,7 @@ package main
 
 import (
   "os"
-  "fmt"
+  // "fmt"
   "log"
   "bufio"
   "strings"
@@ -95,8 +95,8 @@ func main() {
   }
 
   // Print the results.
-  for key, value := range words {
-    fmt.Println(key, value)
-
+  for _, value := range words {
+    if (value != nil) {
+    }
   }
 }

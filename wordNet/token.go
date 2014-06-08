@@ -1,5 +1,7 @@
 package wordNet
 
+const FAMLTHRESHOLD = 3
+
 /*****
  * Basic token struct.
  */
@@ -18,8 +20,8 @@ func tokenize(word string) (result *Token) {
 
   nounScore := famlQuery(word)
 
-  // If no results are found for any word type return a negative value.
-  if (nounScore == 0) {
+  // If too few results are found for any word type return a negative value.
+  if (nounScore < FAMLTHRESHOLD) {
     return nil
   }
 

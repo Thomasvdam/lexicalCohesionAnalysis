@@ -6,7 +6,7 @@ import (
   "io/ioutil"
 )
 
-var ROOT = &treeNode{"entity", nil, make([]*treeNode, 0)}
+var ROOT = &treeNode{"entity", make([]*treeNode, 0)}
 
 /*****
  * Compare one word to another and return a score based on the semantic overlap.
