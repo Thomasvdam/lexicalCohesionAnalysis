@@ -2,7 +2,7 @@ package main
 
 import (
   "os"
-  // "fmt"
+  "fmt"
   "log"
   "bufio"
   "strings"
@@ -93,11 +93,7 @@ func main() {
     }
 
   }
-
-  // Print the results.
-  for _, value := range words {
-    if (value != nil) {
-      wordNet.PrintTest(wordNet.ROOT)
-    }
-  }
+  // Some tests.
+  fmt.Println("game - go")
+  wordNet.CompareTokens(words["game"], words["go"])
 }

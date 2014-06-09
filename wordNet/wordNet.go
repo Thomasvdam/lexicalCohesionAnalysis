@@ -1,7 +1,6 @@
 package wordNet
 
 import (
-  "fmt"
   "strconv"
   "os/exec"
   "io/ioutil"

@@ -33,9 +33,12 @@ The entirety of the WordNet interface is terrible since I spawn shell process fo
   - [ ] Make an accessible interface to WordNet, albeit not very efficient.  
     - [x] Create a function that tokenises words.
       - [x] Places all the senses in an ontology tree which is constructed simultaneously.
-    - [ ] Create a function that compares two senses based on their ontological paths.
-    - [ ] From there decide which sense is most likely. ???
+    - [x] Create a function that compares two senses based on their ontological paths.
+    - [x] From there decide which sense is most likely.
+    - [ ] Write a function that compares 2 words and returns the highest score.
   - [ ] Write the main loop and source text cleaning.
   - [ ] Determine how to score the different types of relations lexical tokens can have.  
 2. [ ] Package the results in a nice JSON.
 3. [ ] Write a small JS script that displays the results.
+
+It might be a good idea to determine the sense based on a number of token matches, but for now I am sticking on a best scoring per pair basis.

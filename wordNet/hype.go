@@ -43,33 +43,25 @@ func hypeQuery(word string, senseNo int) *treeNode {
 
   // Work back from the end of the first path.
   prevNode := ROOT
-  foundChild := false
-  for x := lineNo - 1; x > 3; x-- {
+  loop:
+    for x := lineNo - 1; x > 3; x-- {
 
-    // Check wether the word is already a child.
-    pathIndex := 0
-    for index, value := range prevNode.children {
-      if (value.name == splitLine[x]) {
-        prevNode = value
-        foundChild = true
-        break
+      // Check wether the word is already a child.
+      for _, value := range prevNode.children {
+        if (strings.EqualFold(value.name, splitLine[x])) {
+          prevNode = value
+          continue loop
+        }
       }
-      pathIndex = index
-    }
 
-    // Move onto the next line and child in the tree.
-    if (foundChild) {
-      foundChild = false
-      continue
-    } else {
+      // Move onto the next line and child in the tree.
       newPath := make([]int, len(prevNode.path))
       copy(newPath, prevNode.path)
-      newPath = append(newPath, pathIndex)
+      newPath = append(newPath, len(prevNode.children))
       newNode := newTreeNode(splitLine[x], newPath)
       prevNode.children = append(prevNode.children, newNode)
       prevNode = newNode
     }
-  }
 
   return prevNode
 }
