@@ -97,6 +97,7 @@ func main() {
   // Print the results.
   for _, value := range words {
     if (value != nil) {
+      wordNet.PrintTest(wordNet.ROOT)
     }
   }
 }

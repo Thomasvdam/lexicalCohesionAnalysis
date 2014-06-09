@@ -1,12 +1,14 @@
 package wordNet
 
 import (
+  "fmt"
   "strconv"
   "os/exec"
   "io/ioutil"
 )
 
-var ROOT = &treeNode{"entity", make([]*treeNode, 0)}
+// Root node of the ontological tree.
+var ROOT = &treeNode{"entity", make([]int, 0), make([]*treeNode, 0)}
 
 /*****
  * Compare one word to another and return a score based on the semantic overlap.
@@ -24,7 +26,6 @@ func CreateToken(word string) (newToken *Token) {
 
   return
 }
-
 
 /*****
  * Most basic abstraction of a WordNet query.

@@ -9,14 +9,15 @@ import (
  */
 type treeNode struct {
   name string
+  path []int
   children []*treeNode
 }
 
 /*****
  * Create a new node with the passed name.
  */
-func newTreeNode(word string) (node *treeNode) {
-  node = &treeNode{word, make([]*treeNode, 0)}
+func newTreeNode(word string, path []int) (node *treeNode) {
+  node = &treeNode{word, path, make([]*treeNode, 0)}
   return
 }
 
@@ -46,18 +47,25 @@ func hypeQuery(word string, senseNo int) *treeNode {
   for x := lineNo - 1; x > 3; x-- {
 
     // Check wether the word is already a child.
-    for _, value := range prevNode.children {
+    pathIndex := 0
+    for index, value := range prevNode.children {
       if (value.name == splitLine[x]) {
         prevNode = value
         foundChild = true
+        break
       }
+      pathIndex = index
     }
 
+    // Move onto the next line and child in the tree.
     if (foundChild) {
       foundChild = false
       continue
     } else {
-      newNode := newTreeNode(splitLine[x])
+      newPath := make([]int, len(prevNode.path))
+      copy(newPath, prevNode.path)
+      newPath = append(newPath, pathIndex)
+      newNode := newTreeNode(splitLine[x], newPath)
       prevNode.children = append(prevNode.children, newNode)
       prevNode = newNode
     }
