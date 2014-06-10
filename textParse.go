@@ -4,8 +4,13 @@ import (
   "os"
   "fmt"
   "flag"
+  "time"
   "bufio"
   "strings"
+  "strconv"
+  "os/exec"
+  "syscall"
+  "encoding/csv"
   "github.com/Arcania0311/textParse/wordNet"
 )
 
@@ -15,19 +20,21 @@ import (
 var (
   FRAMEWIDTH int
   FAMLTHRESHOLD int
+  fileName string
 )
 
 func main() {
   // Parse command line flags first.
   flag.IntVar(&FAMLTHRESHOLD, "faml", 3, "The polysemy count at which a word is tokenised.")
   flag.IntVar(&FRAMEWIDTH, "frame", 5, "The number of tokens per frame.")
+  flag.StringVar(&fileName, "file", "goTest", "Name of the .txt file to be processed.")
   flag.Parse()
 
   // Set the famlthreshold
   wordNet.SetFAMLTHRESHOLD(FAMLTHRESHOLD)
 
   // Open the file.
-  lines, err := importLines("goTest.txt")
+  lines, err := importLines(fileName + ".txt")
   if err != nil {
     fmt.Println("readLines: %s", err)
   }
@@ -96,9 +103,32 @@ func main() {
     results = append(results, score)
   }
 
+  // Create a csv file to store the results.
+  resultsFile := "results/" + fileName + "-frame" + strconv.Itoa(FRAMEWIDTH) + "-faml" + strconv.Itoa(FAMLTHRESHOLD) + "-" + strconv.FormatInt(time.Now().Unix(), 5) + ".csv"
+  csvFile, err := os.Create(resultsFile)
+  out := csv.NewWriter(csvFile)
   for index, value := range results {
-    fmt.Println(index, value)
+    csvLine := make([]string, 2)
+    csvLine[0] = strconv.Itoa(index)
+    csvLine[1] = strconv.Itoa(value)
+    out.Write(csvLine)
   }
+  out.Flush()
+
+  // Open the file with the python script.
+  binary, lookErr := exec.LookPath("python")
+  if lookErr != nil {
+      panic(lookErr)
+  }
+  args := []string{"python", "results/showResults.py", resultsFile}
+
+  env := os.Environ()
+
+  execErr := syscall.Exec(binary, args, env)
+  if execErr != nil {
+      panic(execErr)
+  }
+
 }
 
 /*****
