@@ -11,11 +11,12 @@ For my bachelor thesis I want to develop this piece of software to help me bette
 There are two main components to this application: the parsing of a text, and the displaying of the results.
 
 #### Display
-Since I intend to display the results in a visual manner it is probably best if I use the javascript D3 library for this, since this contains excellent methods in order to display and manipulate graphs of varying sorts and sizes. This does mean that I should present the results from the parsing process in a JSON.
+Rather than messing around with D3 I opted to go for matplotlib in python, since it is a little easier to set up. The results are not as pretty though so if I have time I might try writing something in JS after all.
 
 #### Parsing
 The parsing of the texts is of course the most difficult step and involves several stages:  
-* Identifying lexical tokens and the relation between them within a particular frame of observation.  
+* Identifying lexical tokens.
+* Identifying the relations between these tokens within a specified frame.  
 
 ## Hooray!
 
@@ -42,7 +43,7 @@ The entirety of the WordNet interface is terrible since I spawn shell process fo
   - [x] Write a function that compares 2 words and returns the highest score.
   - [x] Write the main loop and source text cleaning.
   - [x] Determine how to score the different types of relations lexical tokens can have.  
-2. [ ] Package the results in a nice JSON.
-3. [ ] Write a small JS script that displays the results.
+2. [x] Package the results in a nice csv file.
+3. [x] Write a small python script that displays the results.
 
 It might be a good idea to determine the sense based on a number of token matches, but for now I am sticking on a best scoring per pair basis.
