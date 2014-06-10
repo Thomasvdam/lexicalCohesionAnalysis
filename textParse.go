@@ -3,63 +3,51 @@ package main
 import (
   "os"
   "fmt"
-  "log"
+  "flag"
   "bufio"
   "strings"
   "github.com/Arcania0311/textParse/wordNet"
 )
 
 /*****
- * Save the word types as constants.
+ * Variables used for command line parsing.
  */
-const (
-  NOUN = iota
-  VERB
-  ADJ
-  ADV
+var (
+  FRAMEWIDTH int
+  FAMLTHRESHOLD int
 )
 
-/*****
- * Open the specified file and return a slice of its lines.
- */
-func importLines(path string) ([]string, error) {
-  file, err := os.Open(path)
-  if err != nil {
-    return nil, err
-  }
-  defer file.Close()
-
-  var lines []string
-  scanner := bufio.NewScanner(file)
-  for scanner.Scan() {
-    lines = append(lines, scanner.Text())
-  }
-  return lines, scanner.Err()
-}
-
 func main() {
+  // Parse command line flags first.
+  flag.IntVar(&FAMLTHRESHOLD, "faml", 3, "The polysemy count at which a word is tokenised.")
+  flag.IntVar(&FRAMEWIDTH, "frame", 5, "The number of tokens per frame.")
+  flag.Parse()
+
+  // Set the famlthreshold
+  wordNet.SetFAMLTHRESHOLD(FAMLTHRESHOLD)
+
   // Open the file.
   lines, err := importLines("goTest.txt")
   if err != nil {
-    log.Fatalf("readLines: %s", err)
+    fmt.Println("readLines: %s", err)
   }
 
   // Create a map in which the words are stored.
   words := make(map[string]*wordNet.Token)
+  text := make([]*wordNet.Token, 0)
 
   // Ugly way to get rid of the most common words.
-  commonWords := make(map[string]bool)
-  commonWords["the"] = true
-  commonWords["a"] = true
-  commonWords["an"] = true
-  commonWords["is"] = true
-  commonWords["are"] = true
-  commonWords["of"] = true
-  commonWords["and"] = true
-  commonWords["be"] = true
-  commonWords["to"] = true
-  commonWords["in"] = true
-  commonWords["by"] = true
+  words["the"] = nil
+  words["a"] = nil
+  words["an"] = nil
+  words["is"] = nil
+  words["are"] = nil
+  words["of"] = nil
+  words["and"] = nil
+  words["be"] = nil
+  words["to"] = nil
+  words["in"] = nil
+  words["by"] = nil
 
   // Process all the lines.
   for _, line := range lines {
@@ -79,21 +67,54 @@ func main() {
       }
       tmp = strings.Map(stripWord, tmp)
 
-      _, check := commonWords[tmp]
-      if check {
-        continue
-      }
-
-      _, ok := words[tmp]
-      if ok {
+      // Append all non-nil tokens to the text slice.
+      token, ok := words[tmp]
+      if (ok && token != nil) {
+        // This makes sure all words are only tokenised once.
+        text = append(text, token)
+      } else if (ok && token == nil) {
         continue
       } else {
-        words[tmp] = wordNet.CreateToken(tmp)
+        newToken := wordNet.CreateToken(tmp)
+        words[tmp] = newToken
+        if (newToken != nil) {
+          text = append(text, newToken)
+        }
       }
     }
-
   }
-  // Some tests.
-  fmt.Println("game - go")
-  wordNet.CompareTokens(words["game"], words["go"])
+
+  results := make([]int, 0)
+
+  // Process the results.
+  for x := 0; x < len(text) - FRAMEWIDTH; x++ {
+    score := 0
+    for frameIndex := 1; frameIndex <= FRAMEWIDTH; frameIndex++ {
+      score += wordNet.CompareTokens(text[x], text[x + frameIndex])
+    }
+    score = score / FRAMEWIDTH
+    results = append(results, score)
+  }
+
+  for index, value := range results {
+    fmt.Println(index, value)
+  }
+}
+
+/*****
+ * Open the specified file and return a slice of its lines.
+ */
+func importLines(path string) ([]string, error) {
+  file, err := os.Open(path)
+  if err != nil {
+    return nil, err
+  }
+  defer file.Close()
+
+  var lines []string
+  scanner := bufio.NewScanner(file)
+  for scanner.Scan() {
+    lines = append(lines, scanner.Text())
+  }
+  return lines, scanner.Err()
 }

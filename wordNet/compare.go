@@ -1,31 +1,22 @@
 package wordNet
 
-import "fmt"
-
 /*****
  * Compare two tokens by comparing all individual sense pairs and return the
  * highest scoring one.
  */
-func CompareTokens(a, b *Token) {
+func CompareTokens(a, b *Token) int {
 
-  var highestA, highestB *treeNode
-  var hiA, hiB int
   highScore := 0
-  for indexA, senseA := range a.sensesN {
-    for indexB, senseB := range b.sensesN {
+  for _, senseA := range a.sensesN {
+    for _, senseB := range b.sensesN {
       newScore := compareSenses(senseA, senseB)
-      //fmt.Println(newScore)
       if (highScore < newScore) {
         highScore = newScore
-        highestA, highestB = senseA, senseB
-        hiA, hiB = indexA, indexB
       }
     }
   }
 
-  fmt.Println(highestA, hiA)
-  fmt.Println(highestB, hiB)
-  fmt.Println(highScore)
+  return highScore
 }
 
 /*****
@@ -41,19 +32,19 @@ func compareSenses(a, b *treeNode) int {
     for index, value = range a.path {
       // Return the point of diversion.
       if (value != b.path[index]) {
-        return index
+        return index * 10 - ((len(a.path) - index) + (len(b.path) - index))
       }
     }
 
-    return 100 - (len(b.path) - index - 1) * 10
+    return 100 - (len(b.path) - index - 1)
   } else {
     for index, value = range b.path {
       // Return the point of diversion.
       if (value != a.path[index]) {
-        return index
+        return index * 10 - ((len(a.path) - index) + (len(b.path) - index))
       }
     }
     // Synonym.
-    return 100 - (len(a.path) - index - 1) * 10
+    return 100 - (len(a.path) - index - 1)
   }
 }

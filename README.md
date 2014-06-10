@@ -17,6 +17,10 @@ Since I intend to display the results in a visual manner it is probably best if 
 The parsing of the texts is of course the most difficult step and involves several stages:  
 * Identifying lexical tokens and the relation between them within a particular frame of observation.  
 
+## Hooray!
+
+Finally got the first version running which has some parameters I can access from the cl so I won't have to recompile all the time. Next up I'm going to export the results (JSON probably) and write a Node.js script which launches a browser with the visualisation.
+
 ## Notes
 
 The entirety of the WordNet interface is terrible since I spawn shell process for every query. If I ever want to improve this program I'll have to write a wrapper for the native C code, which should speed up the process significantly.
@@ -29,15 +33,15 @@ The entirety of the WordNet interface is terrible since I spawn shell process fo
 
 ## To Do
 
-1. [ ] Create a functional core program that can parse a text and produces some kind of result.  
-  - [ ] Make an accessible interface to WordNet, albeit not very efficient.  
+1. [x] Create a functional core program that can parse a text and produces some kind of result.  
+  - [x] Make an accessible interface to WordNet, albeit not very efficient.  
     - [x] Create a function that tokenises words.
       - [x] Places all the senses in an ontology tree which is constructed simultaneously.
-    - [x] Create a function that compares two senses based on their ontological paths.
-    - [x] From there decide which sense is most likely.
-    - [ ] Write a function that compares 2 words and returns the highest score.
-  - [ ] Write the main loop and source text cleaning.
-  - [ ] Determine how to score the different types of relations lexical tokens can have.  
+  - [x] Create a function that compares two senses based on their ontological paths.
+  - [x] From there decide which sense is most likely.
+  - [x] Write a function that compares 2 words and returns the highest score.
+  - [x] Write the main loop and source text cleaning.
+  - [x] Determine how to score the different types of relations lexical tokens can have.  
 2. [ ] Package the results in a nice JSON.
 3. [ ] Write a small JS script that displays the results.
 

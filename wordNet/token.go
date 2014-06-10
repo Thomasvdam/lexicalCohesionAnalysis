@@ -1,6 +1,6 @@
 package wordNet
 
-const FAMLTHRESHOLD = 3
+var FAMLTHRESHOLD = 3
 
 /*****
  * Basic token struct.
@@ -10,6 +10,13 @@ type Token struct {
 
   // The position of all the senses per word type.
   sensesN []*treeNode
+}
+
+/*****
+ * Function to set the threshold for the -famln query.
+ */
+func SetFAMLTHRESHOLD(x int)  {
+  FAMLTHRESHOLD = x
 }
 
 /*****
