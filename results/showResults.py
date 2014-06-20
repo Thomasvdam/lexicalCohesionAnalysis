@@ -11,6 +11,9 @@ values = []
 for col in res:
   values.append(int(col[1]))
 
+if len(values) == 0:
+  exit()
+
 plt.rcParams['figure.figsize'] = len(values), 10
 
 N = len(values)
