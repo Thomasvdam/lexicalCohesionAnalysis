@@ -1,6 +1,6 @@
 package wordNet
 
-var FAMLTHRESHOLD = 3
+var FAMLTHRESHOLD = 2
 
 /*****
  * Basic token struct.

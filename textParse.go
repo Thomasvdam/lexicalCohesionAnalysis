@@ -25,7 +25,7 @@ var (
 
 func main() {
   // Parse command line flags first.
-  flag.IntVar(&FAMLTHRESHOLD, "faml", 3, "The polysemy count at which a word is tokenised.")
+  flag.IntVar(&FAMLTHRESHOLD, "faml", 2, "The polysemy count at which a word is tokenised.")
   flag.IntVar(&FRAMEWIDTH, "frame", 5, "The number of tokens per frame.")
   flag.StringVar(&fileName, "file", "goTest", "Name of the .txt file to be processed.")
   flag.Parse()
