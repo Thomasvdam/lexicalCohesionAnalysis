@@ -32,20 +32,20 @@ func compareSenses(a, b *treeNode) int {
     for index, value = range a.path {
       // Return the point of diversion.
       if (value != b.path[index]) {
-        return score(index) - ((len(a.path) - index) + (len(b.path) - index))
+        return score(index)
       }
     }
-
-    return 100 - (len(b.path) - index - 1)
+    // Synonym.
+    return 100
   } else {
     for index, value = range b.path {
       // Return the point of diversion.
       if (value != a.path[index]) {
-        return score(index) - ((len(a.path) - index) + (len(b.path) - index))
+        return score(index)
       }
     }
     // Synonym.
-    return 100 - (len(a.path) - index - 1)
+    return 100
   }
 }
 
