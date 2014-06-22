@@ -36,7 +36,7 @@ func compareSenses(a, b *treeNode) int {
       }
     }
     // Synonym.
-    return 100
+    return 1000
   } else {
     for index, value = range b.path {
       // Return the point of diversion.
@@ -45,7 +45,7 @@ func compareSenses(a, b *treeNode) int {
       }
     }
     // Synonym.
-    return 100
+    return 1000
   }
 }
 
