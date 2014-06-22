@@ -53,9 +53,13 @@ func compareSenses(a, b *treeNode) int {
  * Helper function to calculate the exponent of two integers.
  */
 func score(y int) (result int) {
-  result = 0
-  for i := 0; i < y; i++ {
-    result += i * 2
+  if (y == 0) {
+    return 1
+  }
+
+  result = 2
+  for i := 1; i < y; i++ {
+    result *= 2
   }
   return
 }
