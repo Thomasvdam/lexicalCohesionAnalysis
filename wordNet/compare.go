@@ -32,7 +32,7 @@ func compareSenses(a, b *treeNode) int {
     for index, value = range a.path {
       // Return the point of diversion.
       if (value != b.path[index]) {
-        return index * 10 - ((len(a.path) - index) + (len(b.path) - index))
+        return score(index) - ((len(a.path) - index) + (len(b.path) - index))
       }
     }
 
@@ -41,10 +41,21 @@ func compareSenses(a, b *treeNode) int {
     for index, value = range b.path {
       // Return the point of diversion.
       if (value != a.path[index]) {
-        return index * 10 - ((len(a.path) - index) + (len(b.path) - index))
+        return score(index) - ((len(a.path) - index) + (len(b.path) - index))
       }
     }
     // Synonym.
     return 100 - (len(a.path) - index - 1)
   }
+}
+
+/*****
+ * Helper function to calculate the exponent of two integers.
+ */
+func score(y int) (result int) {
+  result = 0
+  for i := 0; i < y; i++ {
+    result += i * 2
+  }
+  return
 }
