@@ -33,7 +33,7 @@ func main() {
   wordNet.SetFAMLTHRESHOLD(FAMLTHRESHOLD)
 
   // Open the file.
-  lines, err := importLines(fileName + ".txt")
+  lines, err := importLines("./texts/" + fileName + ".txt")
   if err != nil {
     fmt.Println("readLines: %s", err)
   }
@@ -43,17 +43,18 @@ func main() {
   text := make([]*wordNet.Token, 0)
 
   // Ugly way to get rid of the most common words.
-  words["the"] = nil
   words["a"] = nil
   words["an"] = nil
   words["is"] = nil
-  words["are"] = nil
+  words["as"] = nil
+  words["by"] = nil
   words["of"] = nil
-  words["and"] = nil
   words["be"] = nil
   words["to"] = nil
   words["in"] = nil
-  words["by"] = nil
+  words["are"] = nil
+  words["and"] = nil
+  words["the"] = nil
 
   // Process all the lines.
   for _, line := range lines {
