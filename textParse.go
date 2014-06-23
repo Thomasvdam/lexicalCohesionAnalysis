@@ -4,7 +4,6 @@ import (
   "os"
   "fmt"
   "flag"
-  "time"
   "bufio"
   "strings"
   "strconv"
@@ -92,6 +91,7 @@ func main() {
   }
 
   results := make([]int, 0)
+  totalScore := 0
 
   // Process the results.
   for x := 0; x < len(text) - FRAMEWIDTH; x++ {
@@ -100,12 +100,15 @@ func main() {
       score += wordNet.CompareTokens(text[x], text[x + frameIndex])
     }
     score = score / FRAMEWIDTH
+    totalScore += score
     results = append(results, score)
   }
 
+  totalScore = totalScore / (len(text) - FRAMEWIDTH)
+
   // Create a csv file to store the results.
-  resultsFile := "results/" + fileName + "-frame" + strconv.Itoa(FRAMEWIDTH) + "-faml" + strconv.Itoa(FAMLTHRESHOLD) + "-" + strconv.FormatInt(time.Now().Unix(), 5) + ".csv"
-  csvFile, err := os.Create(resultsFile)
+  resultsFile := fileName + "-" + strconv.Itoa(FRAMEWIDTH) + "-" + strconv.Itoa(FAMLTHRESHOLD) + "-" + strconv.Itoa(totalScore)
+  csvFile, err := os.Create("results/" + resultsFile + ".csv")
   out := csv.NewWriter(csvFile)
   for index, value := range results {
     csvLine := make([]string, 2)
@@ -114,13 +117,14 @@ func main() {
     out.Write(csvLine)
   }
   out.Flush()
+  csvFile.Close()
 
-  // Open the file with the python script.
-  binary, lookErr := exec.LookPath("python")
+  // Open the file with the JavaScript script.
+  binary, lookErr := exec.LookPath("node")
   if lookErr != nil {
       panic(lookErr)
   }
-  args := []string{"python", "results/showResults.py", resultsFile}
+  args := []string{"node", "results/visual/showResults.js", resultsFile}
 
   env := os.Environ()
 
