@@ -6,7 +6,7 @@ var FAMLTHRESHOLD = 2
  * Basic token struct.
  */
 type Token struct {
-  word string
+  Word string
 
   // The position of all the senses per word type.
   sensesN []*treeNode

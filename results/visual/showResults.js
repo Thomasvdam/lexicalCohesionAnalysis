@@ -37,11 +37,13 @@ var svg = d3.select("body").append("svg")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 var dataset = [];
+var tokens = [];
 
 fs.readFile(filePath, 'utf8', function (err, data) {
   d3.csv.parseRows(data, function(d) {
 
-    dataset.push([+d[0], +d[1]])
+    dataset.push([+d[0], +d[1]]);
+    tokens.push(d[2]);
   });
 
   x.domain(d3.extent(dataset, function(d) { return d[0]; }));
@@ -70,9 +72,21 @@ fs.readFile(filePath, 'utf8', function (err, data) {
   var svgGraph = d3.select('svg');
   var svgXML = (new xmldom.XMLSerializer()).serializeToString(svgGraph[0][0]);
 
-  var html = "<!DOCTYPE html>\n<html>\n<head>\n<meta charset='utf-8' />\n</head>\n<style>\nbody {\nfont: 10px sans-serif;\n}\npath,\nline {\nfill: none;\nstroke: #000;\n}\n</style>\n<body>" + svgXML + "\n</body>\n</html>"
+
+
+  var tokensString = "var tokens = ["
+  tokens.forEach(function(d) {
+    tokensString = tokensString + "'" + d +"',"
+  })
+  tokensString = tokensString + "];\n"
+  var scriptString = "<script>\n" + tokensString + "\nfunction checkField(val) {\ndocument.getElementById('tokenDiv').innerHTML = tokens[val];\n};\n</script>"
+  var tokenQuery = "<input type='number' name='txt' value='0' onchange='checkField(this.value)'>"
+  var styleString = "<style>\nbody {\nfont: 10px sans-serif;\n}\npath,\nline {\nfill: none;\nstroke: #000;\n}\n</style>\n"
+  var html = "<!DOCTYPE html>\n<html>\n<head>\n<meta charset='utf-8' />\n" + styleString + "\n" + scriptString + "</head>\n<body>" + svgXML + "<div id='tokenDiv'></div>" + tokenQuery + "\n</body>\n</html>"
 
   // Save the file in .html format.
   var writeName = "./results/visual/graphs/" + fileName + ".html";
   fs.writeFile(writeName, html);
+
+  console.log(fileName + ".html");
 })

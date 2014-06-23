@@ -111,9 +111,10 @@ func main() {
   csvFile, err := os.Create("results/" + resultsFile + ".csv")
   out := csv.NewWriter(csvFile)
   for index, value := range results {
-    csvLine := make([]string, 2)
+    csvLine := make([]string, 3)
     csvLine[0] = strconv.Itoa(index)
     csvLine[1] = strconv.Itoa(value)
+    csvLine[2] = text[index].Word
     out.Write(csvLine)
   }
   out.Flush()
