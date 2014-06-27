@@ -13,3 +13,12 @@ Should I ever revisit this project I will try to address the most glaring issues
 * I decided to drop all wordTypes other than nouns, since nouns are the easiest to classify and determine 'similarity' between. This can be addressed by creating a global root node between the different POS trees in WordNet.
   * This decision is partly due to the fact that it significantly increases performance.
 * The ontological tree is now constructed based on the first path that WordNet displays, mainly because this saves a lot of time and from what I have seen it should not make too big of a difference.
+
+## To Do (not happening any time soon)
+
+* [ ] Refactor the existing code.  
+  * [ ] Utilise the multithreading capabilities of Go.  
+    * After tokenising spawn X workers to work on frames.  
+    * Every frame worker spawns FRAMEWIDTH tokens to do the comparisons.  
+      * atomic package.  
+* [ ] Write into the C interface rather than spawning a separate process every time.
