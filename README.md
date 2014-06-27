@@ -1,49 +1,15 @@
 # Visualising Lexical Cohesion over Token Time
 
-An attempt at developing an application that is able to parse texts, identify cohesive ties within it, and then present the data collected in a visual manner.
+For my bachelor thesis I developed an application that is able to parse texts, identify cohesive ties within it, and then present the data collected visually.
 
-## Why
+## Disclaimer
 
-For my bachelor thesis I want to develop this piece of software to help me better investigate the differences in structure between learner texts and expert texts. I hypothesise that learner texts will show a smaller degree of semantic cohesion when compared to expert texts. In order to test this I make use of WordNet to gather information about the words in the text which I then transform into a score of sorts which tells something about the amount of semantic overlap between lexical tokens.
-
-## Rough Overview
-
-There are two main components to this application: the parsing of a text, and the displaying of the results.
-
-#### Display
-Rather than messing around with D3 I opted to go for matplotlib in python, since it is a little easier to set up. The results are not as pretty though so if I have time I might try writing something in JS after all.
-
-#### Parsing
-The parsing of the texts is of course the most difficult step and involves several stages:  
-* Identifying lexical tokens.
-* Identifying the relations between these tokens within a specified frame.  
-
-## Hooray!
-
-Finally got the first version running which has some parameters I can access from the cl so I won't have to recompile all the time. Next up I'm going to export the results (JSON probably) and write a Node.js script which launches a browser with the visualisation.
+I realise this code is far from perfect and needs significant refactoring. It is also flawed in the sense that it does not interact with the database directly, but rather through the CLI, which is of course highly detrimental to the performance of the program. However, for the purpose of my thesis the current functionality and runtime was sufficient, which is why I did not bother with all the defects.
+Should I ever revisit this project I will try to address the most glaring issues, but for now I'm open sourcing this terrible mess because open source is the way to go. :D
 
 ## Notes
 
-The entirety of the WordNet interface is terrible since I spawn shell process for every query. If I ever want to improve this program I'll have to write a wrapper for the native C code, which should speed up the process significantly.
-
-* Currently I strip all special characters from the tokens, which will be problematic with possessives and and/or constructions.
-* I decided to drop all wordTypes other than nouns, since nouns are the easiest to classify and determine 'similarity' between. This change goes hand in hand with the decision to use the ontological tree to help determine how related 2 word senses are. It boils down to how far removed from each other the two senses are in the tree.  
+* Currently I strip all special characters from the tokens, which will be problematic with possessives and 'and/or' constructions.
+* I decided to drop all wordTypes other than nouns, since nouns are the easiest to classify and determine 'similarity' between. This can be addressed by creating a global root node between the different POS trees in WordNet.
   * This decision is partly due to the fact that it significantly increases performance.
-* It might be worthwhile to drop words that have a low polysemy count as nouns altogether. At the moment I have the threshold set to 3, but this can be easily changed.
 * The ontological tree is now constructed based on the first path that WordNet displays, mainly because this saves a lot of time and from what I have seen it should not make too big of a difference.
-
-## To Do
-
-1. [x] Create a functional core program that can parse a text and produces some kind of result.  
-  - [x] Make an accessible interface to WordNet, albeit not very efficient.  
-    - [x] Create a function that tokenises words.
-      - [x] Places all the senses in an ontology tree which is constructed simultaneously.
-  - [x] Create a function that compares two senses based on their ontological paths.
-  - [x] From there decide which sense is most likely.
-  - [x] Write a function that compares 2 words and returns the highest score.
-  - [x] Write the main loop and source text cleaning.
-  - [x] Determine how to score the different types of relations lexical tokens can have.  
-2. [x] Package the results in a nice csv file.
-3. [x] Write a small python script that displays the results.
-
-It might be a good idea to determine the sense based on a number of token matches, but for now I am sticking on a best scoring per pair basis.
