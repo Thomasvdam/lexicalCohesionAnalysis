@@ -1,0 +1,1 @@
+Go is an adversarial game with the objective of surrounding more territory than one's opponent. As the game progresses, the board gets divided up into areas of territory, as outlined by groups of stones.

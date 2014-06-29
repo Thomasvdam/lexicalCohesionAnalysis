@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset='utf-8' />
+<style>
+body {
+font: 10px sans-serif;
+}
+path,
+line {
+fill: none;
+stroke: #000;
+}
+</style>
+
+<script>
+var tokens = ['go','game','objective','territory','ones','opponent','game','progresses',];
+
+function checkField(val) {
+document.getElementById('tokenDiv').innerHTML = tokens[val];
+};
+</script></head>
+<body><SVG width="960" height="500"><G transform="translate(50,20)"><PATH class="line" d="M0,51.76991150442478L21.19047619047619,43.141592920353986C42.38095238095238,34.51327433628319,84.76190476190476,17.256637168141594,127.14285714285714,79.3141592920354C169.52380952380952,141.3716814159292,211.9047619047619,282.7433628318584,254.28571428571428,355.75221238938053C296.66666666666663,428.76106194690266,339.04761904761904,433.4070796460177,381.4285714285714,432.7433628318584C423.80952380952374,432.07964601769913,466.19047619047615,426.1061946902655,508.57142857142856,425.4424778761062C550.952380952381,424.7787610619469,593.3333333333333,429.42477876106193,635.7142857142857,429.75663716814154C678.095238095238,430.0884955752212,720.4761904761904,426.10619469026545,762.8571428571427,428.7610619469026C805.2380952380952,431.4159292035398,847.6190476190475,440.7079646017699,868.8095238095236,445.3539823008849L890,450"/><G class="x axis" transform="translate(0,450)"><G class="tick" style="opacity: 1;" transform="translate(0,0)"><LINE y2="6" x2="0"/><TEXT y="9" x="0" dy=".71em" style="text-anchor: middle;">0</TEXT></G><G class="tick" style="opacity: 1;" transform="translate(127.14285714285714,0)"><LINE y2="6" x2="0"/><TEXT y="9" x="0" dy=".71em" style="text-anchor: middle;">1</TEXT></G><G class="tick" style="opacity: 1;" transform="translate(254.28571428571428,0)"><LINE y2="6" x2="0"/><TEXT y="9" x="0" dy=".71em" style="text-anchor: middle;">2</TEXT></G><G class="tick" style="opacity: 1;" transform="translate(381.4285714285714,0)"><LINE y2="6" x2="0"/><TEXT y="9" x="0" dy=".71em" style="text-anchor: middle;">3</TEXT></G><G class="tick" style="opacity: 1;" transform="translate(508.57142857142856,0)"><LINE y2="6" x2="0"/><TEXT y="9" x="0" dy=".71em" style="text-anchor: middle;">4</TEXT></G><G class="tick" style="opacity: 1;" transform="translate(635.7142857142857,0)"><LINE y2="6" x2="0"/><TEXT y="9" x="0" dy=".71em" style="text-anchor: middle;">5</TEXT></G><G class="tick" style="opacity: 1;" transform="translate(762.8571428571428,0)"><LINE y2="6" x2="0"/><TEXT y="9" x="0" dy=".71em" style="text-anchor: middle;">6</TEXT></G><G class="tick" style="opacity: 1;" transform="translate(890,0)"><LINE y2="6" x2="0"/><TEXT y="9" x="0" dy=".71em" style="text-anchor: middle;">7</TEXT></G><PATH class="domain" d="M0,6V0H890V6"/></G><G class="y axis"><G class="tick" style="opacity: 1;" transform="translate(0,414.1592920353982)"><LINE x2="-6" y2="0"/><TEXT x="-9" y="0" dy=".32em" style="text-anchor: end;">20</TEXT></G><G class="tick" style="opacity: 1;" transform="translate(0,374.3362831858407)"><LINE x2="-6" y2="0"/><TEXT x="-9" y="0" dy=".32em" style="text-anchor: end;">40</TEXT></G><G class="tick" style="opacity: 1;" transform="translate(0,334.5132743362832)"><LINE x2="-6" y2="0"/><TEXT x="-9" y="0" dy=".32em" style="text-anchor: end;">60</TEXT></G><G class="tick" style="opacity: 1;" transform="translate(0,294.6902654867257)"><LINE x2="-6" y2="0"/><TEXT x="-9" y="0" dy=".32em" style="text-anchor: end;">80</TEXT></G><G class="tick" style="opacity: 1;" transform="translate(0,254.86725663716814)"><LINE x2="-6" y2="0"/><TEXT x="-9" y="0" dy=".32em" style="text-anchor: end;">100</TEXT></G><G class="tick" style="opacity: 1;" transform="translate(0,215.0442477876106)"><LINE x2="-6" y2="0"/><TEXT x="-9" y="0" dy=".32em" style="text-anchor: end;">120</TEXT></G><G class="tick" style="opacity: 1;" transform="translate(0,175.22123893805315)"><LINE x2="-6" y2="0"/><TEXT x="-9" y="0" dy=".32em" style="text-anchor: end;">140</TEXT></G><G class="tick" style="opacity: 1;" transform="translate(0,135.3982300884956)"><LINE x2="-6" y2="0"/><TEXT x="-9" y="0" dy=".32em" style="text-anchor: end;">160</TEXT></G><G class="tick" style="opacity: 1;" transform="translate(0,95.57522123893807)"><LINE x2="-6" y2="0"/><TEXT x="-9" y="0" dy=".32em" style="text-anchor: end;">180</TEXT></G><G class="tick" style="opacity: 1;" transform="translate(0,55.75221238938053)"><LINE x2="-6" y2="0"/><TEXT x="-9" y="0" dy=".32em" style="text-anchor: end;">200</TEXT></G><G class="tick" style="opacity: 1;" transform="translate(0,15.92920353982305)"><LINE x2="-6" y2="0"/><TEXT x="-9" y="0" dy=".32em" style="text-anchor: end;">220</TEXT></G><PATH class="domain" d="M-6,0H0V450H-6"/><TEXT transform="rotate(-90)" y="6" dy=".71em" style="text-anchor: end;">Cohesion</TEXT></G></G></SVG><div id='tokenDiv'></div><input type='number' name='txt' value='0' onchange='checkField(this.value)'>
+</body>
+</html>
