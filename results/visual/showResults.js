@@ -41,9 +41,10 @@ var tokens = [];
 
 fs.readFile(filePath, 'utf8', function (err, data) {
   d3.csv.parseRows(data, function(d) {
-
-    dataset.push([+d[0], +d[1]]);
-    tokens.push(d[2]);
+    if (!isNaN(+d[0])) {
+      dataset.push([+d[0], +d[1]]);
+      tokens.push(d[2]);
+    }
   });
 
   x.domain(d3.extent(dataset, function(d) { return d[0]; }));
